@@ -91,7 +91,7 @@
 
 .vm-dashboard-card h3 {
     margin: 0 0 15px 0;
-    color: #1d2327;
+    color: #141414;
     font-size: 1.3em;
 }
 
@@ -313,6 +313,11 @@
 }
 
 /* Forms */
+
+.vm-form-container H1 {
+    color: #fff;
+
+}
 .vm-form-container {
     background: #fff;
     border-radius: 12px;
@@ -337,7 +342,7 @@
 }
 
 .vm-form-container .form-table td {
-    padding: 15px 0;
+    padding: 15px 15px;
     background: #fff;
     border-bottom: 1px solid #e1e1e1;
 }
@@ -411,6 +416,7 @@
     padding: 20px;
     margin-bottom: 15px;
     transition: all 0.3s ease;
+    
 }
 
 .vm-document-item:hover {
@@ -421,13 +427,13 @@
 .vm-document-item .document-title {
     font-size: 16px;
     font-weight: 600;
-    color: #1d2327;
+    color: #ffffff;
     margin-bottom: 8px;
     line-height: 1.4;
 }
 
 .vm-document-item .document-filename {
-    color: #646970;
+    color: #e2e2e2;
     font-size: 13px;
     margin-bottom: 15px;
     font-style: italic;
@@ -720,11 +726,11 @@
     }
 
     .vm-dashboard-card h3 {
-        color: #e1e1e1;
+        color: #2e2e2e;
     }
 
     .vm-dashboard-card p {
-        color: #b5bcc2;
+        color: #dfdfdf;
     }
 
     .vm-data-table thead {

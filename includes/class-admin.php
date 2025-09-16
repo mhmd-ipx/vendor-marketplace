@@ -42,16 +42,6 @@ class Vendor_Marketplace_Admin {
             30
         );
 
-        // Submenu for documentation
-        add_submenu_page(
-            'vendor-marketplace',
-            __('داکیومنت', 'vendor-marketplace'),
-            __('داکیومنت', 'vendor-marketplace'),
-            'manage_options',
-            'vendor-marketplace-docs',
-            array($this->docs_manager, 'documentation_page')
-        );
-
         // Submenu for user management
         add_submenu_page(
             'vendor-marketplace',
@@ -60,6 +50,16 @@ class Vendor_Marketplace_Admin {
             'manage_options',
             'vendor-marketplace-users',
             array($this->user_manager, 'user_management_page')
+        );
+
+        // Submenu for documentation
+        add_submenu_page(
+            'vendor-marketplace',
+            __('داکیومنت', 'vendor-marketplace'),
+            __('داکیومنت', 'vendor-marketplace'),
+            'manage_options',
+            'vendor-marketplace-docs',
+            array($this->docs_manager, 'documentation_page')
         );
 
         // Placeholder for other submenus
