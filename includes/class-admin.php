@@ -11,6 +11,7 @@ class Vendor_Marketplace_Admin {
 
     private $user_manager;
     private $docs_manager;
+    private $products_manager;
 
     public function __construct() {
         // Load admin components
@@ -28,6 +29,18 @@ class Vendor_Marketplace_Admin {
         // Load documentation class
         require_once VENDOR_MARKETPLACE_PLUGIN_DIR . 'includes/class-admin-docs.php';
         $this->docs_manager = new Vendor_Marketplace_Admin_Docs();
+
+        // Load products management class
+        require_once VENDOR_MARKETPLACE_PLUGIN_DIR . 'includes/class-admin-products.php';
+        $this->products_manager = new Vendor_Marketplace_Admin_Products();
+
+        // Load inventory management class
+        require_once VENDOR_MARKETPLACE_PLUGIN_DIR . 'includes/class-admin-inventory.php';
+        $this->inventory_manager = new Vendor_Marketplace_Admin_Inventory();
+
+        // Load modals class
+        require_once VENDOR_MARKETPLACE_PLUGIN_DIR . 'includes/class-admin-modals.php';
+        $this->modals_manager = new Vendor_Marketplace_Admin_Modals();
     }
 
     public function add_admin_menu() {
@@ -62,6 +75,26 @@ class Vendor_Marketplace_Admin {
             array($this->docs_manager, 'documentation_page')
         );
 
+        // Submenu for product management
+        add_submenu_page(
+            'vendor-marketplace',
+            __('مدیریت محصولات', 'vendor-marketplace'),
+            __('مدیریت محصولات', 'vendor-marketplace'),
+            'manage_options',
+            'vendor-marketplace-products',
+            array($this->products_manager, 'product_management_page')
+        );
+
+        // Submenu for inventory management
+        add_submenu_page(
+            'vendor-marketplace',
+            __('مدیریت انبار', 'vendor-marketplace'),
+            __('مدیریت انبار', 'vendor-marketplace'),
+            'manage_options',
+            'vendor-marketplace-inventory',
+            array($this->inventory_manager, 'inventory_management_page')
+        );
+
         // Placeholder for other submenus
         // add_submenu_page('vendor-marketplace', __('تنظیمات', 'vendor-marketplace'), __('تنظیمات', 'vendor-marketplace'), 'manage_options', 'vendor-marketplace-settings', array($this, 'settings_page'));
     }
@@ -75,6 +108,38 @@ class Vendor_Marketplace_Admin {
                 array(),
                 '1.0.0'
             );
+
+            // Enqueue scripts for inventory management
+            if (strpos($hook, 'vendor-marketplace-inventory') !== false) {
+                wp_enqueue_script(
+                    'vendor-marketplace-inventory',
+                    VENDOR_MARKETPLACE_PLUGIN_URL . 'assets/js/inventory.js',
+                    array('jquery'),
+                    '1.0.0',
+                    true
+                );
+
+                wp_localize_script('vendor-marketplace-inventory', 'inventory_ajax', array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce('inventory_nonce'),
+                ));
+            }
+
+            // Enqueue scripts for products management
+            if (strpos($hook, 'vendor-marketplace-products') !== false) {
+                wp_enqueue_script(
+                    'vendor-marketplace-products',
+                    VENDOR_MARKETPLACE_PLUGIN_URL . 'assets/js/products.js',
+                    array('jquery'),
+                    '1.0.0',
+                    true
+                );
+
+                wp_localize_script('vendor-marketplace-products', 'products_ajax', array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce('products_nonce'),
+                ));
+            }
         }
     }
 
@@ -96,6 +161,13 @@ class Vendor_Marketplace_Admin {
                     <h3><?php _e('مدیریت نقش‌ها', 'vendor-marketplace'); ?></h3>
                     <p><?php _e('نقش‌های کاربری را مدیریت کنید و دسترسی‌های مختلف را تنظیم کنید.', 'vendor-marketplace'); ?></p>
                     <a href="?page=vendor-marketplace-roles" class="button button-primary"><?php _e('مدیریت نقش‌ها', 'vendor-marketplace'); ?></a>
+                </div>
+
+                <div class="vm-dashboard-card">
+                    <span class="card-icon">📦</span>
+                    <h3><?php _e('مدیریت محصولات', 'vendor-marketplace'); ?></h3>
+                    <p><?php _e('تمام محصولات ووکامرس را مشاهده و مدیریت کنید.', 'vendor-marketplace'); ?></p>
+                    <a href="?page=vendor-marketplace-products" class="button button-primary"><?php _e('مدیریت محصولات', 'vendor-marketplace'); ?></a>
                 </div>
 
                 <div class="vm-dashboard-card">
@@ -159,6 +231,7 @@ class Vendor_Marketplace_Admin {
         </div>
         <?php
     }
+
 
     public function roles_management_page() {
         // Handle role change form submission

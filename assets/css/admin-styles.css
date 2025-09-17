@@ -755,6 +755,102 @@
     }
 }
 
+/* Inventory Management Styles */
+.vm-inventory-tab {
+    margin: 20px 0;
+}
+
+.supplier-selector {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.supplier-selector label {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.supplier-selector select {
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    min-width: 200px;
+}
+
+.vm-inventory-tab .nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.vm-inventory-tab .nav-tab {
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    color: #555;
+    padding: 10px 20px;
+    margin-left: 0;
+    margin-right: 4px;
+    text-decoration: none;
+    border-radius: 4px 4px 0 0;
+}
+
+.vm-inventory-tab .nav-tab-active {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+    color: #000;
+}
+
+.tab-content {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 4px 4px 4px;
+    padding: 20px;
+}
+
+/* Form Groups in Modal */
+.vm-modal .form-group {
+    margin-bottom: 20px;
+}
+
+.vm-modal .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.vm-modal .form-group input,
+.vm-modal .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.vm-modal .form-group input:focus,
+.vm-modal .form-group select:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+    outline: none;
+}
+
+.vm-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e1e1;
+}
+
 /* Print Styles */
 @media print {
     .vm-action-buttons,

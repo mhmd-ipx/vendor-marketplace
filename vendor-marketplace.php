@@ -57,6 +57,54 @@ register_deactivation_hook(__FILE__, 'vendor_marketplace_deactivate');
 function vendor_marketplace_activate() {
     require_once VENDOR_MARKETPLACE_PLUGIN_DIR . 'includes/class-roles.php';
     Vendor_Marketplace_Roles::add_roles();
+
+    // Create inventory table
+    vendor_marketplace_create_inventory_table();
+}
+
+function vendor_marketplace_create_inventory_table() {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'vendor_inventory';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        user_id bigint(20) unsigned NOT NULL,
+        product_id bigint(20) unsigned NOT NULL,
+        quantity_self int(11) NOT NULL DEFAULT 0,
+        quantity_central int(11) NOT NULL DEFAULT 0,
+        price decimal(10,2) NOT NULL DEFAULT 0.00,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP,
+        updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        UNIQUE KEY user_product (user_id, product_id),
+        KEY user_id (user_id),
+        KEY product_id (product_id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+
+    // Create transactions table
+    $transactions_table = $wpdb->prefix . 'inventory_transactions';
+    $sql2 = "CREATE TABLE $transactions_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        product_id bigint(20) unsigned NOT NULL,
+        user_id bigint(20) unsigned DEFAULT 0,
+        type enum('ورود','خروج') NOT NULL,
+        quantity int(11) NOT NULL,
+        inventory_type enum('self','central','product') DEFAULT 'product',
+        source enum('manual','purchase','sale','adjustment','other') DEFAULT 'manual',
+        reason varchar(255) DEFAULT '',
+        created_at datetime DEFAULT CURRENT_TIMESTAMP,
+        created_by bigint(20) unsigned NOT NULL,
+        PRIMARY KEY (id),
+        KEY product_user (product_id, user_id),
+        KEY created_at (created_at)
+    ) $charset_collate;";
+
+    dbDelta($sql2);
 }
 
 function vendor_marketplace_deactivate() {
